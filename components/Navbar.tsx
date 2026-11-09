@@ -64,7 +64,7 @@ const styles = {
   partnerBadge: { fontSize: 11, backgroundColor: '#F4A261', color: '#111', padding: '2px 6px', borderRadius: 4, fontWeight: '600' },
   navLinks: { display: 'flex', gap: 10 },
   navBtn: {
-    background: 'transparent',
+    backgroundColor: 'transparent', // 👈 Change 'background' to 'backgroundColor'
     border: 'none',
     color: '#FAD2D2',
     fontSize: 14,
@@ -75,7 +75,7 @@ const styles = {
   } as React.CSSProperties,
   activeNavBtn: { backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFF' },
   signOutBtn: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent', // 👈 Change 'background' to 'backgroundColor'
     border: '1px solid #FAD2D2',
     color: '#FFF',
     padding: '6px 12px',

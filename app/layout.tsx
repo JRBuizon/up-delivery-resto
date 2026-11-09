@@ -1,10 +1,9 @@
 // app/layout.tsx
-import type { Metadata } from 'next';
 import './globals.css';
 
-export const metadata: Metadata = {
-  title: 'UP Food Delivery - Vendor Portal',
-  description: 'Manage menu items and live orders for your campus eatery.',
+export const metadata = {
+  title: 'UP Delivery - Merchant Portal',
+  description: 'Manage your campus restaurant orders and menu.',
 };
 
 export default function RootLayout({
@@ -14,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ margin: 0, backgroundColor: '#F8F9FA', fontFamily: 'system-ui, sans-serif' }}>
+      <body style={{ margin: 0, padding: 0, fontFamily: 'sans-serif', backgroundColor: '#FAFAFA' }}>
         {children}
       </body>
     </html>
