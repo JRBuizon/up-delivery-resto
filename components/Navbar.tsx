@@ -50,6 +50,8 @@ export function Navbar({ restaurantName, activeTab, setActiveTab, onSignOut }: N
 
 const styles = {
   nav: {
+    position:'sticky',
+    top: 0,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -73,7 +75,10 @@ const styles = {
     borderRadius: 8,
     cursor: 'pointer',
   } as React.CSSProperties,
-  activeNavBtn: { backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFF' },
+  activeNavBtn: { 
+    backgroundColor: 'rgba(255,255,255,0.2)', 
+    color: '#FFF' 
+  },
   signOutBtn: {
     backgroundColor: 'transparent', // 👈 Change 'background' to 'backgroundColor'
     border: '1px solid #FAD2D2',
