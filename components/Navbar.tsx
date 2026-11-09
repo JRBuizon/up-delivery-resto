@@ -50,6 +50,8 @@ export function Navbar({ restaurantName, activeTab, setActiveTab, onSignOut }: N
 
 const styles = {
   nav: {
+    position:'sticky',
+    top: 0,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -64,7 +66,7 @@ const styles = {
   partnerBadge: { fontSize: 11, backgroundColor: '#F4A261', color: '#111', padding: '2px 6px', borderRadius: 4, fontWeight: '600' },
   navLinks: { display: 'flex', gap: 10 },
   navBtn: {
-    background: 'transparent',
+    backgroundColor: 'transparent', // Fixed: Changed 'background' to 'backgroundColor'
     border: 'none',
     color: '#FAD2D2',
     fontSize: 14,
@@ -73,7 +75,10 @@ const styles = {
     borderRadius: 8,
     cursor: 'pointer',
   } as React.CSSProperties,
-  activeNavBtn: { backgroundColor: 'rgba(255,255,255,0.2)', color: '#FFF' },
+  activeNavBtn: { 
+    backgroundColor: 'rgba(255,255,255,0.2)', 
+    color: '#FFF' 
+  },
   signOutBtn: {
     backgroundColor: 'transparent',
     border: '1px solid #FAD2D2',
