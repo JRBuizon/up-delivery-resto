@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Navbar } from '../components/Navbar';
 import { OrdersQueue } from '../components/OrderQueue';
 import { MenuManager } from '../components/MenuManager';
@@ -77,6 +78,13 @@ export default function MerchantDashboard() {
           >
             Sign In to Dashboard
           </button>
+
+          <p style={styles.registerText}>
+            New merchant?{' '}
+            <Link href="/register" style={styles.registerLink}>
+              Register your restaurant
+            </Link>
+          </p>
 
           <div style={styles.demoSection}>
             <p style={styles.demoTitle}>⚡ Quick Fill Demo Merchants:</p>
@@ -195,6 +203,18 @@ const styles = {
     cursor: 'pointer',
     marginTop: 12,
     boxShadow: '0 4px 12px rgba(123, 17, 19, 0.2)',
+  } as React.CSSProperties,
+  registerText: {
+    fontSize: 13,
+    color: '#666',
+    marginTop: 16,
+    marginBottom: 0,
+    textAlign: 'center',
+  } as React.CSSProperties,
+  registerLink: {
+    color: UP_MAROON,
+    fontWeight: 'bold',
+    textDecoration: 'none',
   } as React.CSSProperties,
   demoSection: {
     width: '100%',
