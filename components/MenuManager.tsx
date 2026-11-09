@@ -1,7 +1,8 @@
+// components/MenuManager.tsx
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { supabase } from '../utils/supabase'; // Adjust path to your supabase client
+import { supabase } from '../utils/supabase';
 
 interface MenuItem {
   id: string;
@@ -15,7 +16,7 @@ interface MenuItem {
 export function MenuManager({ restaurantId }: { restaurantId: string }) {
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -26,7 +27,8 @@ export function MenuManager({ restaurantId }: { restaurantId: string }) {
     const { data, error } = await supabase
       .from('menu_items')
       .select('*')
-      .eq('restaurant_id', restaurantId);
+      .eq('restaurant_id', restaurantId)
+      .order('created_at', { ascending: true });
 
     if (!error && data) setMenu(data);
     setLoading(false);
@@ -34,6 +36,19 @@ export function MenuManager({ restaurantId }: { restaurantId: string }) {
 
   useEffect(() => {
     fetchMenu();
+
+    const channel = supabase
+      .channel(`merchant-menu-${restaurantId}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'menu_items', filter: `restaurant_id=eq.${restaurantId}` },
+        () => fetchMenu()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [restaurantId]);
 
   const handleAddDish = async (e: React.FormEvent) => {
@@ -63,42 +78,69 @@ export function MenuManager({ restaurantId }: { restaurantId: string }) {
   };
 
   const toggleAvailability = async (id: string, currentStatus: boolean) => {
-    await supabase
+    const { error } = await supabase
       .from('menu_items')
       .update({ is_available: !currentStatus })
       .eq('id', id);
-    fetchMenu();
+    if (error) alert('Error updating status: ' + error.message);
+    else fetchMenu();
   };
 
   const deleteItem = async (id: string) => {
     if (confirm('Are you sure you want to delete this dish?')) {
-      await supabase.from('menu_items').delete().eq('id', id);
-      fetchMenu();
+      const { error } = await supabase.from('menu_items').delete().eq('id', id);
+      if (error) alert('Error deleting item: ' + error.message);
+      else fetchMenu();
     }
   };
 
   return (
     <div style={styles.container}>
-      <h2>Manage Menu & Pricing 📋</h2>
+      <h2>Manage Menu & Pricing 🍲</h2>
       <p style={styles.subtitle}>Add new items or toggle stock availability instantly for campus buyers.</p>
 
       {/* Add New Dish Form */}
       <form onSubmit={handleAddDish} style={styles.formCard}>
         <h3>Add New Dish</h3>
         <div style={styles.formGrid}>
-          <input placeholder="Dish Name (e.g. Special Sisig)" value={name} onChange={e => setName(e.target.value)} required style={styles.input} />
-          <input placeholder="Price (₱)" type="number" value={price} onChange={e => setPrice(e.target.value)} required style={styles.input} />
-          <input placeholder="Image URL (Unsplash link)" value={image} onChange={e => setImage(e.target.value)} style={styles.input} />
+          <input
+            placeholder="Dish Name (e.g. Special Sisig)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            style={styles.input}
+          />
+          <input
+            placeholder="Price (₱)"
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+            style={styles.input}
+          />
+          <input
+            placeholder="Image URL (Unsplash link)"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            style={styles.input}
+          />
         </div>
-        <textarea placeholder="Short description..." value={description} onChange={e => setDescription(e.target.value)} style={styles.textarea} />
+        <textarea
+          placeholder="Short description..."
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          style={styles.textarea}
+        />
         <button type="submit" style={styles.addBtn}>+ Add Item to Menu</button>
       </form>
 
       {/* Existing Menu Items Grid */}
       <h3>Current Menu ({menu.length} items)</h3>
-      {loading ? <p>Loading menu...</p> : (
+      {loading ? (
+        <p>Loading menu...</p>
+      ) : (
         <div style={styles.grid}>
-          {menu.map(item => (
+          {menu.map((item) => (
             <div key={item.id} style={{ ...styles.card, ...(item.is_available ? {} : styles.soldOutCard) }}>
               <img src={item.image} alt={item.name} style={styles.dishImage} />
               <div style={styles.cardContent}>
@@ -107,7 +149,7 @@ export function MenuManager({ restaurantId }: { restaurantId: string }) {
                   <span style={styles.priceTag}>₱{item.price}.00</span>
                 </div>
                 <p style={styles.dishDesc}>{item.description}</p>
-                
+
                 <div style={styles.cardActions}>
                   <button
                     style={{

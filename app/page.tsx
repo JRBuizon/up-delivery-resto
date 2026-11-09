@@ -8,11 +8,12 @@ import { MenuManager } from '../components/MenuManager';
 
 const UP_MAROON = '#7B1113';
 
-// Quick demo accounts matching the delivery app's restaurant IDs
 const DEMO_RESTAURANTS = [
   { id: 'kanto-cravings', name: 'Kanto Cravings' },
   { id: 'up-tea-hub', name: 'UP Tea Hub' },
   { id: 'silog-stop', name: 'Silog Stop' },
+  { id: 'knl-lomian', name: 'KNL Lomian' },
+  { id: 'maginhawa-grills', name: 'Maginhawa Grills' },
 ];
 
 export default function MerchantDashboard() {
